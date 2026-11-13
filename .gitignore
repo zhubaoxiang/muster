@@ -8,6 +8,9 @@ build/linux/
 frontend/dist/
 frontend/package.json.md5
 .wails/
+# vite 依赖预构建缓存（默认在 node_modules/.vite，指定 dir 时可能落到这里）
+frontend/.vite/
+.vite/
 
 # 可执行文件
 *.exe
@@ -16,6 +19,16 @@ frontend/package.json.md5
 *.dylib
 *.test
 *.out
+*.prof
+
+# ---- 数据库（重要）----
+# app.go 的 dbFile() 在 UserConfigDir() 失败时会退回相对路径 "muster.db"，
+# 此时库文件会落在仓库根目录，必须忽略，否则会被 git add . 提交
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
 
 # ---- 依赖 ----
 node_modules/
@@ -32,6 +45,9 @@ Thumbs.db
 # ---- 编辑器 / IDE ----
 .idea/
 .vscode/
+.vs/
+*.suo
+*.user
 *.swp
 *~
 
