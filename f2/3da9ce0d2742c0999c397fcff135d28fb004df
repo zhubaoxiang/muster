@@ -1,0 +1,14 @@
+.gitignore
+  h_1c2395c8f9a92f 38-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f23da9ce0d2742c0999c397fcff135d28fb004df",
+  "prompts": {},
+  "humans": {
+    "h_1c2395c8f9a92f": {
+      "author": "zhubaoxiang2 <zhubaoxiang2@intra.nsfocus.com>"
+    }
+  }
+}
