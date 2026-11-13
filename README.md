@@ -1,6 +1,7 @@
 # 点兵 · AI 资产测绘（桌面版）
 
-> 点兵——沙场点兵，盘点自己有多少兵、多少门。`dianbing`（拼音标识）/ Muster（英文标识）。
+> 点兵——沙场点兵，盘点自己有多少兵、多少门。仓库目录 `muster/`，英文标识 **Muster**；
+> 二进制、Go module 与运行时数据目录仍沿用 `dianbing`（见下方「命名约定」）。
 
 Wails v2 + Vue 3 + Go 单机桌面应用。探测引擎内嵌同进程，SQLite 单文件存储，
 内置目标护栏（白名单 + 私网锁定 + 并发硬顶），AI 三档分析（规则指纹 → Ollama → 云 API）。
@@ -10,7 +11,7 @@ Wails v2 + Vue 3 + Go 单机桌面应用。探测引擎内嵌同进程，SQLite 
 ## 目录结构
 
 ```
-dianbing/
+muster/
 ├── main.go                  # Wails 入口（嵌入 frontend/dist）
 ├── app.go                   # 绑定层：StartScan/StopScan/GetAssets/设置读写（含旧库自动迁移）
 ├── wails.json
@@ -30,6 +31,23 @@ dianbing/
         └── services/api.ts  # Wails 绑定检测 + 浏览器 mock（可独立开发 UI）
 ```
 
+## 命名约定
+
+项目有两个标识并存，改动时注意区分：
+
+| 标识 | 值 | 出现位置 | 说明 |
+|------|-----|----------|------|
+| 仓库目录 | `muster` | 文件夹名、git 仓库 | 对外英文名 |
+| 二进制产物 | `dianbing` | `wails.json` → `build/bin/dianbing.exe` | 中文「点兵」拼音 |
+| Go module | `dianbing` | `go.mod`、全部 import 路径 | `dianbing/internal/...` |
+| 前端包名 | `dianbing-frontend` | `frontend/package.json` | |
+| 数据目录 | `dianbing/dianbing.db` | `%AppData%`（`app.go` 拼装） | 改名会导致旧库不被读取 |
+| User-Agent | `dianbing-scanner/0.1` | `internal/engine/webprobe.go` | 探测流量标识 |
+
+> Go module 名与仓库目录名解耦，目录叫 `muster`、module 叫 `dianbing` 不影响编译。
+> 若将来要把 module 也改成 `muster`，需同步替换全部 import、`wails.json`、`package.json`，
+> 并处理 `%AppData%/dianbing/` 下已有数据库的迁移，否则用户会"丢"掉历史资产。
+
 ## 环境要求
 
 - Go 1.22+
@@ -41,14 +59,14 @@ dianbing/
 
 ```bash
 # 首次：拉取 Go 依赖（含 Wails v2、modernc/sqlite）
-cd dianbing && go mod tidy
+cd muster && go mod tidy
 
 # 开发模式（前端热更新 + 引擎直连）
 wails dev
 
 # 出包：单个 exe（frontend/dist 已内嵌）
 wails build
-# 产物：build/bin/dianbing.exe
+# 产物：build/bin/dianbing.exe（文件名由 wails.json 的 outputfilename 决定）
 
 # 只跑护栏单测
 go test ./internal/guard/
