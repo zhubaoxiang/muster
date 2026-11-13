@@ -1,0 +1,36 @@
+README.md
+  h_1c2395c8f9a92f 3-4,34,36,38-45,47-50,70
+app.go
+  h_1c2395c8f9a92f 12-15,51,53-58,62,65-67,71-80,82
+frontend/package-lock.json
+  h_1c2395c8f9a92f 2,8
+frontend/package.json
+  h_1c2395c8f9a92f 2
+go.mod
+  h_1c2395c8f9a92f 1
+internal/engine/engine.go
+  h_1c2395c8f9a92f 14-17
+internal/engine/webprobe.go
+  h_1c2395c8f9a92f 14-16,182,230
+internal/guard/guard.go
+  h_1c2395c8f9a92f 15
+internal/guard/guard_test.go
+  h_1c2395c8f9a92f 7
+internal/store/store.go
+  h_1c2395c8f9a92f 14
+tools/dbdump/main.go
+  h_1c2395c8f9a92f 18-19,21-28
+wails.json
+  h_1c2395c8f9a92f 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "01402afe195a16bc804ee13c16355ea28c1e929c",
+  "prompts": {},
+  "humans": {
+    "h_1c2395c8f9a92f": {
+      "author": "zhubaoxiang2 <zhubaoxiang2@intra.nsfocus.com>"
+    }
+  }
+}
