@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"dianbing/internal/ai"
-	"dianbing/internal/guard"
-	"dianbing/internal/model"
+	"muster/internal/ai"
+	"muster/internal/guard"
+	"muster/internal/model"
 )
 
 // WebProber 并发 HTTP 探测器（首期阶段）。
@@ -179,7 +179,7 @@ func (w *WebProber) probeOne(ctx context.Context, url string) (model.Asset, bool
 	if err != nil {
 		return a, false
 	}
-	req.Header.Set("User-Agent", "dianbing-scanner/0.1")
+	req.Header.Set("User-Agent", "muster-scanner/0.1")
 
 	resp, err := w.client.Do(req)
 	if err != nil {
@@ -227,7 +227,7 @@ func (w *WebProber) retryHTTP(ctx context.Context, httpsURL string) (model.Asset
 	if err != nil {
 		return a, false
 	}
-	req.Header.Set("User-Agent", "dianbing-scanner/0.1")
+	req.Header.Set("User-Agent", "muster-scanner/0.1")
 	resp, err := w.client.Do(req)
 	if err != nil {
 		return a, false

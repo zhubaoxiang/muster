@@ -11,7 +11,7 @@ import (
 
 	_ "modernc.org/sqlite" // 纯 Go 驱动，无需 CGO
 
-	"dianbing/internal/model"
+	"muster/internal/model"
 )
 
 type Store struct {

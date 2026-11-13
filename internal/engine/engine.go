@@ -11,10 +11,10 @@ import (
 	"sync"
 	"time"
 
-	"dianbing/internal/ai"
-	"dianbing/internal/guard"
-	"dianbing/internal/model"
-	"dianbing/internal/store"
+	"muster/internal/ai"
+	"muster/internal/guard"
+	"muster/internal/model"
+	"muster/internal/store"
 )
 
 // Stage 流水线阶段接口，二期 naabu/nuclei 按此接入

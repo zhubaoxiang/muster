@@ -1,7 +1,7 @@
 # 点兵 · AI 资产测绘（桌面版）
 
-> 点兵——沙场点兵，盘点自己有多少兵、多少门。仓库目录 `muster/`，英文标识 **Muster**；
-> 二进制、Go module 与运行时数据目录仍沿用 `dianbing`（见下方「命名约定」）。
+> 点兵——沙场点兵，盘点自己有多少兵、多少门。英文标识 **Muster**，仓库目录 `muster/`；
+> Go module、二进制产物与运行时数据目录统一使用 `muster`（见下方「命名与升级」）。
 
 Wails v2 + Vue 3 + Go 单机桌面应用。探测引擎内嵌同进程，SQLite 单文件存储，
 内置目标护栏（白名单 + 私网锁定 + 并发硬顶），AI 三档分析（规则指纹 → Ollama → 云 API）。
@@ -31,22 +31,23 @@ muster/
         └── services/api.ts  # Wails 绑定检测 + 浏览器 mock（可独立开发 UI）
 ```
 
-## 命名约定
+## 命名与升级
 
-项目有两个标识并存，改动时注意区分：
+中文名「点兵」，英文标识统一为 `muster`：
 
-| 标识 | 值 | 出现位置 | 说明 |
-|------|-----|----------|------|
-| 仓库目录 | `muster` | 文件夹名、git 仓库 | 对外英文名 |
-| 二进制产物 | `dianbing` | `wails.json` → `build/bin/dianbing.exe` | 中文「点兵」拼音 |
-| Go module | `dianbing` | `go.mod`、全部 import 路径 | `dianbing/internal/...` |
-| 前端包名 | `dianbing-frontend` | `frontend/package.json` | |
-| 数据目录 | `dianbing/dianbing.db` | `%AppData%`（`app.go` 拼装） | 改名会导致旧库不被读取 |
-| User-Agent | `dianbing-scanner/0.1` | `internal/engine/webprobe.go` | 探测流量标识 |
+| 项 | 值 |
+|----|-----|
+| 仓库目录 | `muster/` |
+| Go module | `muster`（import 路径 `muster/internal/...`） |
+| 二进制产物 | `build/bin/muster.exe`（由 `wails.json` 的 `outputfilename` 决定） |
+| 前端包名 | `muster-frontend` |
+| 数据目录 | `%AppData%/muster/muster.db` |
+| User-Agent | `muster-scanner/0.1` |
 
-> Go module 名与仓库目录名解耦，目录叫 `muster`、module 叫 `dianbing` 不影响编译。
-> 若将来要把 module 也改成 `muster`，需同步替换全部 import、`wails.json`、`package.json`，
-> 并处理 `%AppData%/dianbing/` 下已有数据库的迁移，否则用户会"丢"掉历史资产。
+> **升级注意**：库名经历过两次变更，最早为 `aiasset`，上一版为点兵拼音标识。
+> 首次以新名字启动时，`app.go` 的 `migrateOldDB` 会按「新 → 旧」顺序找到最近的旧库
+> 整体复制过来（含 `-wal`，保留未 checkpoint 的数据），资产与设置不会丢。
+> 旧数据目录原样保留，确认迁移无误后可自行删除。
 
 ## 环境要求
 
@@ -66,7 +67,7 @@ wails dev
 
 # 出包：单个 exe（frontend/dist 已内嵌）
 wails build
-# 产物：build/bin/dianbing.exe（文件名由 wails.json 的 outputfilename 决定）
+# 产物：build/bin/muster.exe（文件名由 wails.json 的 outputfilename 决定）
 
 # 只跑护栏单测
 go test ./internal/guard/

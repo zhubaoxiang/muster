@@ -4,7 +4,7 @@ import (
 	"net"
 	"testing"
 
-	"dianbing/internal/model"
+	"muster/internal/model"
 )
 
 func privateSettings() model.Settings {

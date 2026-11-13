@@ -15,11 +15,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	// 新版库名 dianbing；旧版 aiasset 兜底（未迁移过的库）
-	path := filepath.Join(dir, "dianbing", "dianbing.db")
+	// 当前库名 muster；旧版 dianbing、更早 aiasset 依次兜底（未迁移过的库）
+	path := filepath.Join(dir, "muster", "muster.db")
 	if _, err := os.Stat(path); err != nil {
-		if _, err2 := os.Stat(filepath.Join(dir, "aiasset", "aiasset.db")); err2 == nil {
-			path = filepath.Join(dir, "aiasset", "aiasset.db")
+		for _, p := range []string{
+			filepath.Join(dir, "dianbing", "dianbing.db"),
+			filepath.Join(dir, "aiasset", "aiasset.db"),
+		} {
+			if _, err2 := os.Stat(p); err2 == nil {
+				path = p
+				break
+			}
 		}
 	}
 	db, err := sql.Open("sqlite", path)

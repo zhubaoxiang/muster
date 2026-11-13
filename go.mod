@@ -1,4 +1,4 @@
-module dianbing
+module muster
 
 go 1.26.0
 

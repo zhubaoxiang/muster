@@ -9,10 +9,10 @@ import (
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"dianbing/internal/engine"
-	"dianbing/internal/guard"
-	"dianbing/internal/model"
-	"dianbing/internal/store"
+	"muster/internal/engine"
+	"muster/internal/guard"
+	"muster/internal/model"
+	"muster/internal/store"
 )
 
 // App Wails 绑定层：所有暴露给前端的方法都挂在这里。
@@ -48,28 +48,38 @@ func (a *App) shutdown(ctx context.Context) {
 func dbFile() string {
 	dir, err := os.UserConfigDir()
 	if err == nil {
-		p := filepath.Join(dir, "dianbing")
+		p := filepath.Join(dir, "muster")
 		if err := os.MkdirAll(p, 0o755); err == nil {
-			dst := filepath.Join(p, "dianbing.db")
-			migrateOldDB(filepath.Join(dir, "aiasset", "aiasset.db"), dst)
+			dst := filepath.Join(p, "muster.db")
+			// 历史库名按「新 → 旧」排列：dianbing 最近一版，aiasset 更早
+			migrateOldDB(dst,
+				filepath.Join(dir, "dianbing", "dianbing.db"),
+				filepath.Join(dir, "aiasset", "aiasset.db"),
+			)
 			return dst
 		}
 	}
-	return "dianbing.db"
+	return "muster.db"
 }
 
-// migrateOldDB 兼容旧版（aiasset）：首次以新名字运行时，把旧库整体复制过来，资产记录不丢
-func migrateOldDB(old, dst string) {
+// migrateOldDB 兼容历史版本库名：首次以新名字运行时，把旧库整体复制过来，资产记录不丢。
+// olds 按「新 → 旧」排序，命中第一个存在的就迁移后返回，避免拿更老的库覆盖新数据。
+func migrateOldDB(dst string, olds ...string) {
 	if _, err := os.Stat(dst); err == nil {
 		return // 新库已存在，不迁移
 	}
-	if _, err := os.Stat(old); err != nil {
-		return // 无旧库
-	}
-	for _, suffix := range []string{"", "-wal", "-shm"} {
-		if data, err := os.ReadFile(old + suffix); err == nil {
-			_ = os.WriteFile(dst+suffix, data, 0o644)
+	for _, old := range olds {
+		if _, err := os.Stat(old); err != nil {
+			continue // 该旧库不存在，看下一个
 		}
+		// -wal 一并复制，保留尚未 checkpoint 的已提交数据；
+		// -shm 只是共享内存索引，由 SQLite 自行重建，复制反而可能引入不一致
+		for _, suffix := range []string{"", "-wal"} {
+			if data, err := os.ReadFile(old + suffix); err == nil {
+				_ = os.WriteFile(dst+suffix, data, 0o644)
+			}
+		}
+		return
 	}
 }
 
