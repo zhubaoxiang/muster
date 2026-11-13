@@ -1,0 +1,14 @@
+README.md
+  h_1c2395c8f9a92f 9,99,101-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f756640374aeea8929e8143589ddf2e39cd89fcf",
+  "prompts": {},
+  "humans": {
+    "h_1c2395c8f9a92f": {
+      "author": "zhubaoxiang2 <zhubaoxiang2@intra.nsfocus.com>"
+    }
+  }
+}
